@@ -14,6 +14,15 @@ class BlocExample extends StatelessWidget {
         title: const Text('Bloc Example'),
       ),
       body: BlocListener<ExampleBloc, ExampleState>(
+        listenWhen: (previous, current) {
+          // posso 'selecionar' quando q eu quero q meu widget seja rebuildado
+          if (previous is ExampleStateInitial && current is ExampleStateData) {
+            if (current.names.length > 6) {
+              return true;
+            }
+          }
+          return false;
+        },
         listener: (context, state) {
           if (state is ExampleStateData) {
             ScaffoldMessenger.of(context).showSnackBar(
