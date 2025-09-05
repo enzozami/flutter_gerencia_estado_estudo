@@ -11,21 +11,37 @@ class BlocExample extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bloc Example'),
       ),
-      body: BlocBuilder<ExampleBloc, ExampleState>(
-        builder: (context, state) {
+      body: BlocListener<ExampleBloc, ExampleState>(
+        listener: (context, state) {
           if (state is ExampleStateData) {
-            return ListView.builder(
-              itemCount: state.names.length,
-              itemBuilder: (context, index) {
-                final name = state.names[index];
-                return ListTile(
-                  title: Text(name),
-                );
-              },
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('A quantidade de nomes é ${state.names.length}'),
+              ),
             );
           }
-          return const Text('Nenhum nome cadastrado');
         },
+        child: Column(
+          children: [
+            BlocBuilder<ExampleBloc, ExampleState>(
+              builder: (context, state) {
+                if (state is ExampleStateData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.names.length,
+                    itemBuilder: (context, index) {
+                      final name = state.names[index];
+                      return ListTile(
+                        title: Text(name),
+                      );
+                    },
+                  );
+                }
+                return const Text('Nenhum nome cadastrado');
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
