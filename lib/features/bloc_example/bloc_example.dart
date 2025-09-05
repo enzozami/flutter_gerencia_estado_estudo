@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gerencia_de_estado_example/features/bloc_example/bloc/example_bloc.dart';
@@ -23,6 +25,15 @@ class BlocExample extends StatelessWidget {
         },
         child: Column(
           children: [
+            BlocConsumer<ExampleBloc, ExampleState>(
+              listener: (context, state) => log('Estado alterado para ${state.runtimeType}'),
+              builder: (context, state) {
+                if (state is ExampleStateData) {
+                  return Text('Total de nomes ${state.names.length}');
+                }
+                return SizedBox.shrink();
+              },
+            ),
             BlocBuilder<ExampleBloc, ExampleState>(
               builder: (context, state) {
                 if (state is ExampleStateData) {
