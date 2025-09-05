@@ -61,25 +61,43 @@ class BlocExample extends StatelessWidget {
                 return SizedBox.shrink();
               },
             ),
-            BlocBuilder<ExampleBloc, ExampleState>(
-              builder: (context, state) {
-                if (state is ExampleStateData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.names.length,
-                    itemBuilder: (context, index) {
-                      final name = state.names[index];
-                      return ListTile(
-                        onTap: () {
-                          context.read<ExampleBloc>().add(ExampleRemoveNameEvent(name: name));
-                        },
-                        title: Text(name),
-                      );
-                    },
-                  );
-                }
-                return const Text('Nenhum nome cadastrado');
-              },
+            Expanded(
+              child: BlocBuilder<ExampleBloc, ExampleState>(
+                builder: (context, state) {
+                  if (state is ExampleStateData) {
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.names.length,
+                            itemBuilder: (context, index) {
+                              final name = state.names[index];
+                              return ListTile(
+                                onTap: () {
+                                  context
+                                      .read<ExampleBloc>()
+                                      .add(ExampleRemoveNameEvent(name: name));
+                                },
+                                title: Text(name),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 150,
+                          child: TextButton(
+                            onPressed: () =>
+                                context.read<ExampleBloc>().add(ExampleAddNameEvent(name: 'Teste')),
+                            child: Text('Adicionar'),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  return const Text('Nenhum nome cadastrado');
+                },
+              ),
             ),
           ],
         ),
