@@ -36,6 +36,22 @@ class BlocExample extends StatelessWidget {
                 'Estado alterado para ${state.runtimeType}',
               ),
             ),
+            BlocSelector<ExampleBloc, ExampleState, bool>(
+              selector: (state) {
+                if (state is ExampleStateInitial) return true;
+                return false;
+              },
+              builder: (context, showLoader) {
+                if (showLoader) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                return SizedBox.shrink();
+              },
+            ),
             BlocBuilder<ExampleBloc, ExampleState>(
               builder: (context, state) {
                 if (state is ExampleStateData) {
